@@ -1,0 +1,94 @@
+<div class="abrir-modal animacion fadeIn" *ngIf="modalService.modal">
+  <div class="modal" tabindex="-1" style="display:block;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ titulo }}</h5>
+          <button (click)="cerrarModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+
+            <div class="row">
+
+              <div class="col-sm">
+                <img *ngIf="cliente.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
+                  alt="{{cliente.foto}}" class="img-thumbnail rounded float-start">
+              </div>
+
+              <div class="col-sm">
+                <ul *ngIf="cliente" class="list-group text-dark mb-3">
+                  <li class="list-group-item active">{{cliente.nombre}}</li>
+                  <li class="list-group-item">{{cliente.apellido}}</li>
+                  <li class="list-group-item">{{cliente.email}}</li>
+                  <li class="list-group-item">{{cliente.createAt | date:"fullDate"}}</li>
+                  <li class="list-group-item">{{cliente.region.nombre}}</li>
+                </ul>
+                <!-- *ngIf="authService.hasRole('ROLE_ADMIN)" -->
+                <div class="input-group mb-3">
+                  <input (change)="seleccionarFoto($event)" type="file" class="form-control" id="inputGroupFile02">
+                  <div class="input-group-append">
+                    <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button" name="button"
+                      for="inputGroupFileAddon04">Subir Foto</button>
+                  </div>
+                </div>
+
+                <div *ngIf="progreso > 0" class="progress" role="progressbar" aria-label="Default striped example"
+                  attr.aria-valuenow="{{progreso}}" aria-valuemin="0" aria-valuemax="100">
+                  <div class="progress-bar progress-bar-striped" [ngStyle]="{width:progreso+'%'}">
+                    {{progreso}}%
+                  </div>
+                </div>
+
+              </div>
+
+
+            </div>
+
+            <div class="row">
+              <button type="button" class="btn btn-success btn-sm" [routerLink]="['/facturas/form', cliente.id]">crear
+                factura</button>
+            </div>
+
+            <div class="row">
+              <div class="alert alert-info my-4" *ngIf="cliente.facturas.length==0">
+                No hay facturas asignadas para el cliente {{cliente.nombre}} {{cliente.apellido}}
+              </div>
+              <table class="table table-bordered table-striped my-4" *ngIf="cliente.facturas.length>0">
+                <thead>
+                  <tr>
+                    <th>folio</th>
+                    <th>descripcion</th>
+                    <th>fecha</th>
+                    <th>total</th>
+                    <th>detalle</th>
+                    <th>eliminar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let factura of cliente.facturas">
+                    <td>{{factura.id}}</td>
+                    <td>{{factura.descripcion}}</td>
+                    <td>{{factura.createAt}}</td>
+                    <td>{{factura.total}}</td>
+                    <td><button class="btn btn-primary btn-sm" type="button"
+                        [routerLink]="['/facturas', factura.id]">ver</button></td>
+                    <td><button class="btn btn-danger btn-sm" type="button" (click)="delete(factura)">eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="cerrarModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
